@@ -1,1 +1,32 @@
-spring.application.name: user
+spring:
+  application.name: user
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${locky.services.auth.url}
+          jwk-set-uri: ${locky.services.auth.url}/oauth2/jwks
+  r2dbc:
+    username: ${database.username}
+    password: ${database.password}
+    url: r2dbc:postgresql://${database.endpoint}/${database.name}?preparedStatementCacheQueries=0
+  flyway:
+    user: ${database.username}
+    password: ${database.password}
+    url: jdbc:postgresql://${database.endpoint}/${database.name}
+    baselineOnMigrate: true
+    table: flyway_${spring.application.name}_schema_history
+
+server:
+  port: 9002
+
+locky:
+  services:
+    auth:
+      url: http://localhost:9000
+
+database:
+  endpoint: localhost:5432
+  name: demo
+  username: database_username
+  password: database_password
